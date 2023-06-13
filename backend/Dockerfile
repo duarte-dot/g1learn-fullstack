@@ -2,11 +2,11 @@ FROM php:8.1-apache
 
 RUN docker-php-ext-install pdo pdo_mysql
 
-WORKDIR /var/www/html
+WORKDIR /app
 
 COPY . .
 
-RUN chown -R www-data:www-data /var/www/html/storage
+RUN chown -R www-data:www-data /app/storage
 
 RUN a2enmod rewrite
 
