@@ -64,7 +64,7 @@ class UserController extends Controller {
 
       $user->save();
 
-      return ['retorno' => 'Usuário atualizado!', 'dados atualizados' => $request->only('name', 'email')];
+      return ['retorno' => 'Usuário atualizado!', 'updated_data' => $request->only('name', 'email')];
     } catch (\Exception $erro) {
       return ['retorno' => 'erro', 'details' => $erro];
     }
@@ -80,7 +80,7 @@ class UserController extends Controller {
 
       $user->delete();
 
-      return ['retorno' => 'ok'];
+      return ['retorno' => 'Usuário deletado'];
     } catch (\Exception $erro) {
       return ['retorno' => 'erro', 'details' => $erro];
     }

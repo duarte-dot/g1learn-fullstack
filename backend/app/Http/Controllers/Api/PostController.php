@@ -10,28 +10,115 @@ use App\Models\User;
 class PostController extends Controller
 {
   public function list() {
-    $post = Post::all();
-    
-    return $post;
+      $posts = Post::with('category')->get();
+  
+      $formattedPosts = $posts->map(function ($post) {
+          return [
+              'id' => $post->id,
+              'user' => $post->user->name,
+              'category' => $post->category->name,
+              'title' => $post->title,
+              'content' => $post->content,
+              'created_at' => $post->created_at,
+              'updated_at' => $post->updated_at
+          ];
+      });
+  
+      return $formattedPosts;
   }
+
+  public function select($id) {
+    $post = Post::with('category')->find($id);
+
+    if (!$post) {
+        return ['retorno' => 'erro', 'mensagem' => 'Post não existe'];
+    }
+
+    $formattedPost = [
+        'id' => $post->id,
+        'user' => $post->user->name,
+        'category' => $post->category->name,
+        'title' => $post->title,
+        'content' => $post->content,
+        'created_at' => $post->created_at,
+        'updated_at' => $post->updated_at
+    ];
+
+    return $formattedPost;
+}
 
   public function add(Request $request) {
     try {
-      if (!auth()->check()) {
-        return ['retorno' => 'erro', 'mensagem' => 'Usuário não autenticado'];
-    }
+        $user = auth()->user();
+        $post = new Post();
 
-    $user = auth()->user();
-    $post = new Post();
+        $post->title = $request->title;
+        $post->content = $request->content;
+        $post->category_id = $request->category_id;
 
-    $post->title = $request->title;
-    $post->content = $request->content;
+        $user->posts()->save($post);
 
-    $user->posts()->save($post);
+        $post->load('category'); // Carrega a relação category
 
-    return ['retorno' => 'Post criado!', 'post' => $request->only('title', 'content')];
+        return [
+            'retorno' => 'Post criado!',
+            'post' => [
+                'title' => $post->title,
+                'content' => $post->content,
+                'category' => $post->category->name // Acessa o nome da categoria relacionada
+            ]
+        ];
     } catch(\Exception $erro) {
-      return ['retorno'=>'erro', 'details'=>$erro];
+        return ['retorno' => 'erro', 'details' => $erro];
+    }
+  }
+
+  public function update(Request $request, $id) {
+    try {
+        $post = Post::with(['user', 'category'])->find($id);
+
+        if (!$post) {
+            return ['retorno' => 'erro', 'mensagem' => 'Post não existe'];
+        }
+
+        $post->title = $request->title;
+        $post->content = $request->content;
+        $post->category_id = $request->category_id;
+
+        $post->save();
+
+        // Recarregar o modelo a partir do banco de dados
+        $post->refresh();
+
+        $formattedPost = [
+            'id' => $post->id,
+            'user' => $post->user->name,
+            'category' => $post->category->name,
+            'title' => $post->title,
+            'content' => $post->content,
+            'created_at' => $post->created_at,
+            'updated_at' => $post->updated_at
+        ];
+
+        return ['retorno' => 'Post atualizado!', 'updated_data' => $formattedPost];
+    } catch (\Exception $erro) {
+        return ['retorno' => 'erro', 'details' => $erro];
+    }
+  }
+  
+  public function delete($id) {
+    try {
+      $post = Post::find($id);
+
+      if (!$post) {
+        return ['retorno' => 'erro', 'mensagem' => 'Post não existe'];
+      }
+
+      $post->delete();
+
+      return ['retorno' => 'Post deletado'];
+    } catch (\Exception $erro) {
+      return ['retorno' => 'erro', 'details' => $erro];
     }
   }
 }
