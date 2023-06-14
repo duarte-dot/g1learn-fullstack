@@ -20,4 +20,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Rota corrigida
-Route::get('/teste', [UserController::class, 'status']);
+Route::get('/status', [UserController::class, 'status']);
+
+Route::group(['namespace' => 'Api'], function(){
+  Route::post('/users', [UserController::class, 'add']);
+
+  Route::get('/users', [UserController::class, 'list']);
+
+  Route::get('/users/{id}', [UserController::class, 'select']);
+
+  Route::put('/users/{id}', [UserController::class, 'update']);
+
+  Route::delete('/users/{id}', [UserController::class, 'delete']);
+});
