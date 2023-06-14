@@ -45,7 +45,7 @@ class PostController extends Controller
     ];
 
     return $formattedPost;
-}
+  }
 
   public function add(Request $request) {
     try {
@@ -105,7 +105,7 @@ class PostController extends Controller
         return ['retorno' => 'erro', 'details' => $erro];
     }
   }
-  
+
   public function delete($id) {
     try {
       $post = Post::find($id);

@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CommentController;
+
 
 
 Route::get('/status', [UserController::class, 'status']);
@@ -29,7 +31,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
   Route::get('/posts', [PostController::class, 'list']);
   Route::get('/posts/{id}', [PostController::class, 'select']);
+  Route::get('/posts/{post_id}/comments', [CommentController::class, 'listByPost']);
   Route::post('/posts', [PostController::class, 'add']);
   Route::put('/posts/{id}', [PostController::class, 'update']);
   Route::delete('/posts/{id}', [PostController::class, 'delete']);
+
+  Route::get('/comments', [CommentController::class, 'list']);
+  Route::get('/comments/{id}', [CommentController::class, 'select']);
+  Route::post('/comments', [CommentController::class, 'add']);
+  Route::post('/posts/{post_id}/comments', [CommentController::class, 'addCommentToPost']);
+  Route::put('/comments/{id}', [CommentController::class, 'updateComment']);
+  Route::delete('/comments/{id}', [CommentController::class, 'deleteComment']);
 });
