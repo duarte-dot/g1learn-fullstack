@@ -6,69 +6,71 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 
-class CategoryController extends Controller {
-  public function list() {
-    $category = Category::all();
-    
-    return $category;
-  }
+class CategoryController extends Controller
+{
+    public function list()
+    {
+        $categories = Category::all();
 
-  public function select($id) {
-    $category = Category::find($id, 'name');
-
-    if (!$category) {
-      return ['retorno' => 'erro', 'mensagem' => 'Categoria não existe'];
+        return $categories;
     }
-  
-    return $category;
-  }
 
-  public function add(Request $request) {
-    try {
-    $category = new Category();
+    public function select($id)
+    {
+        $category = Category::find($id, 'name');
 
-    $category->name = $request->name;
+        if (!$category) {
+            return response()->json(['retorno' => 'erro', 'mensagem' => 'Categoria não existe']);
+        }
 
-    $category->save();
-
-    return ['retorno' => 'Categoria criada!', 'categoria' => $category];
-    } catch(\Exception $erro) {
-      return ['retorno'=>'erro', 'details'=>$erro];
+        return $category;
     }
-  }
 
-  public function update(Request $request, $id) {
-    try {
-      $category = Category::find($id);
+    public function add(Request $request)
+    {
+        try {
+            $category = Category::create([
+                'name' => $request->name,
+            ]);
 
-      // Verificar se o usuário existe
-      if (!$category) {
-          return ['retorno' => 'erro', 'mensagem' => 'Categoria não existe'];
-      }
-
-      $category->name = $request->name;
-
-      $category->save();
-
-      return ['retorno' => 'Categoria atualizada!', 'updated_data' => $request->only('name')];
-    } catch (\Exception $erro) {
-      return ['retorno' => 'erro', 'details' => $erro];
+            return response()->json(['retorno' => 'Categoria criada!', 'categoria' => $category]);
+        } catch (\Exception $error) {
+            return response()->json(['retorno' => 'erro', 'details' => $error->getMessage()]);
+        }
     }
-  }
 
-  public function delete($id) {
-    try {
-      $category = Category::find($id);
+    public function update(Request $request, $id)
+    {
+        try {
+            $category = Category::find($id);
 
-      if (!$category) {
-        return ['retorno' => 'erro', 'mensagem' => 'Categoria não existe'];
-      }
+            if (!$category) {
+                return response()->json(['retorno' => 'erro', 'mensagem' => 'Categoria não existe']);
+            }
 
-      $category->delete();
+            $category->name = $request->name;
+            $category->save();
 
-      return ['retorno' => 'Categoria deletada'];
-    } catch (\Exception $erro) {
-      return ['retorno' => 'erro', 'details' => $erro];
+            return response()->json(['retorno' => 'Categoria atualizada!', 'updated_data' => $request->only('name')]);
+        } catch (\Exception $error) {
+            return response()->json(['retorno' => 'erro', 'details' => $error->getMessage()]);
+        }
     }
-  }
+
+    public function delete($id)
+    {
+        try {
+            $category = Category::find($id);
+
+            if (!$category) {
+                return response()->json(['retorno' => 'erro', 'mensagem' => 'Categoria não existe']);
+            }
+
+            $category->delete();
+
+            return response()->json(['retorno' => 'Categoria deletada']);
+        } catch (\Exception $error) {
+            return response()->json(['retorno' => 'erro', 'details' => $error->getMessage()]);
+        }
+    }
 }

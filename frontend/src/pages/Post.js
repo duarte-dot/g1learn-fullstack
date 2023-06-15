@@ -155,10 +155,30 @@ export default function PostDetails() {
     }
   };
 
+  const formatarDataHora = (data) => {
+    const dataObj = new Date(data);
+    const formatoData = {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    };
+  
+    const formatoHora = {
+      hour: '2-digit',
+      minute: '2-digit',
+      // second: '2-digit',
+    };
+  
+    const dataFormatada = dataObj.toLocaleDateString('pt-BR', formatoData);
+    const horaFormatada = dataObj.toLocaleTimeString('pt-BR', formatoHora);
+  
+    return `${dataFormatada} às ${horaFormatada}`;
+  };
+  
+
   return (
     <div>
       <Navigation />
-      <h2>Detalhes do Post</h2>
       {editMode ? (
         <form className="newpost-form" onSubmit={updatePost}>
           <div className="newpost-title">
@@ -200,14 +220,11 @@ export default function PostDetails() {
       ) : (
         post && (
           <div key={post.id}>
-            <p>ID: {post.id}</p>
-            <p>User: {post.user}</p>
-            <p>UserId: {post.user_id}</p>
-            <p>Category: {post.category}</p>
-            <p>Title: {post.title}</p>
-            <p>Content: {post.content}</p>
-            <p>Created At: {post.created_at}</p>
-            <p>Updated At: {post.updated_at}</p>
+            <h1>{post.title}</h1>
+            <p>Criado por {post.user}, em {formatarDataHora(post.created_at)}</p>
+            <p>Categoria: {post.category}</p>
+            <p>{post.content}</p>
+            <p>Última atualização: {formatarDataHora(post.updated_at)}</p>
             {post.user_id.toString() === localStorage.getItem('user_id') && (
               <button onClick={handleEditButton}>Edit Post</button>
             )}
@@ -222,9 +239,8 @@ export default function PostDetails() {
       {comments.length > 0 ? (
         comments.map((comment) => (
           <div key={comment.id}>
-            <p>User: {comment.user}</p>
-            <p>Content: {comment.content}</p>
-            <p>Created At: {comment.created_at}</p>
+            <p><strong>{comment.user}</strong>, {formatarDataHora(comment.created_at)}</p>
+            <p>{comment.content}</p>
           </div>
         ))
       ) : (
