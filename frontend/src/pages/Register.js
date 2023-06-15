@@ -6,7 +6,8 @@ export default function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [password_confirmation, setPasswordConfirmation] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [error, setError] = useState('');
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -17,32 +18,35 @@ export default function Register() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password, password_confirmation }),
+        body: JSON.stringify({ name, email, password, password_confirmation: passwordConfirmation }),
       });
 
-      const data = await response.json();
-      const token = data.token;
-      const userId = data.user.id;
+      if (response.ok) {
+        const data = await response.json();
+        const token = data.token;
+        const userId = data.user.id;
 
-      localStorage.setItem('user_id', userId);
-      localStorage.setItem('token', token)
+        localStorage.setItem('user_id', userId);
+        localStorage.setItem('token', token);
 
-      navigate('/home');
+        navigate('/home');
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error);
+      }
     } catch (error) {
-      alert(error);
+      setError('Ocorreu um erro na requisição. Por favor, tente novamente.');
       console.log('Erro na requisição', error);
     }
   };
 
   return (
     <div>
-    <div>
       <h2>Registre-se</h2>
-
-    <div className='register-form-box'>
-        <form className='register-form' onSubmit={handleRegister}>
-        <div className='register-name'>
-            <label htmlFor="name">name:</label>
+      <div className="register-form-box">
+        <form className="register-form" onSubmit={handleRegister}>
+          <div className="register-name">
+            <label htmlFor="name">Nome:</label>
             <input
               required
               type="text"
@@ -51,8 +55,8 @@ export default function Register() {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
-          <div className='register-email'>
-            <label htmlFor="email">email:</label>
+          <div className="register-email">
+            <label htmlFor="email">Email:</label>
             <input
               required
               type="email"
@@ -61,8 +65,8 @@ export default function Register() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className='register-password'>
-            <label htmlFor="password">senha:</label>
+          <div className="register-password">
+            <label htmlFor="password">Senha:</label>
             <input
               required
               type="password"
@@ -71,20 +75,22 @@ export default function Register() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <div className='register-passwordConfirmation'>
-            <label htmlFor="passwordConfirmation">confirme sua senha:</label>
+          <div className="register-passwordConfirmation">
+            <label htmlFor="passwordConfirmation">Confirme sua senha:</label>
             <input
               required
               type="password"
               id="passwordConfirmation"
-              value={password_confirmation}
+              value={passwordConfirmation}
               onChange={(e) => setPasswordConfirmation(e.target.value)}
             />
           </div>
-          <button className='register-button' type="submit">Registrar</button>
+          {error && <p className="register-error">{error}</p>}
+          <button className="register-button" type="submit">
+            Registrar
+          </button>
         </form>
       </div>
-    </div>
     </div>
   );
 }

@@ -9,23 +9,32 @@ use App\Models\User;
 
 class PostController extends Controller
 {
-  public function list() {
-      $posts = Post::with('category')->get();
-  
-      $formattedPosts = $posts->map(function ($post) {
-          return [
-              'id' => $post->id,
-              'user' => $post->user->name,
-              'category' => $post->category->name,
-              'title' => $post->title,
-              'content' => $post->content,
-              'created_at' => $post->created_at,
-              'updated_at' => $post->updated_at
-          ];
-      });
-  
-      return $formattedPosts;
-  }
+  public function list(Request $request) {
+    $category_id = $request->input('category_id');
+
+    $postsQuery = Post::with('category');
+
+    if ($category_id) {
+        $postsQuery->where('category_id', $category_id);
+    }
+
+    $posts = $postsQuery->get();
+
+    $formattedPosts = $posts->map(function ($post) {
+        return [
+            'id' => $post->id,
+            'user' => $post->user->name,
+            'category' => $post->category->name,
+            'title' => $post->title,
+            'content' => $post->content,
+            'created_at' => $post->created_at,
+            'updated_at' => $post->updated_at
+        ];
+    });
+
+    return $formattedPosts;
+}
+
 
   public function select($id) {
     $post = Post::with('category')->find($id);

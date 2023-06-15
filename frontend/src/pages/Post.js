@@ -3,12 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 
 export default function PostDetails() {
-  const [post, setPost] = useState('');
+  const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [editMode, setEditMode] = useState(false);
-  const [categories, setCategories] = useState('');
-  const [editedPost, setEditedPost] = useState({ title: '', content: '', category_id: '' });
+  const [categories, setCategories] = useState([]);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -42,10 +41,10 @@ export default function PostDetails() {
 
       const responseData = await response.json();
 
-      if (responseData.retorno !== 'erro') {
+      if (response.ok) {
         setPost(responseData);
       } else {
-        navigate('/home')
+        navigate('/home');
         alert(responseData.mensagem);
       }
     } catch (error) {
@@ -53,7 +52,7 @@ export default function PostDetails() {
     }
   }, [id, navigate]);
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await fetch('http://localhost:8000/api/categories', {
         headers: {
@@ -61,31 +60,27 @@ export default function PostDetails() {
         },
       });
 
+      if (response.ok) {
         const data = await response.json();
         setCategories(data);
+      } else {
+        alert('Houve um erro ao carregar as categorias');
+        console.log('Listar categorias - Erro na requisição');
+      }
     } catch (error) {
-      alert('Houve um erro ao carregar as categorias')
+      alert('Houve um erro ao carregar as categorias');
       console.log('Listar categorias - Erro na requisição', error);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchPost();
-      await fetchComments();
-      await fetchCategories();
-    };
-  
-    fetchData();
-  }, [id, fetchPost, fetchComments]);
+    fetchPost();
+    fetchComments();
+    fetchCategories();
+  }, [id, fetchPost, fetchComments, fetchCategories]);
 
   const handleEditButton = () => {
     setEditMode(true);
-    setEditedPost({
-      title: editedPost.title,
-      content: editedPost.content,
-      category_id: editedPost.category_id,
-    });
   };
 
   const handleDeleteButton = async () => {
@@ -96,18 +91,16 @@ export default function PostDetails() {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-  
+
       if (response.ok) {
         navigate('/home');
       } else {
-        // Tratar caso de erro na requisição
         console.log('Erro na requisição');
       }
     } catch (error) {
-      // Tratar caso de erro na requisição
       console.log('Erro na requisição', error);
     }
-  }
+  };
 
   const handleNewCommentSubmit = async (e) => {
     e.preventDefault();
@@ -126,22 +119,20 @@ export default function PostDetails() {
         setNewComment('');
         fetchComments();
       } else {
-        // Tratar caso de erro na requisição
         console.log('Erro na requisição');
       }
     } catch (error) {
-      // Tratar caso de erro na requisição
       console.log('Erro na requisição', error);
     }
   };
 
   const handleInputChange = (e) => {
-    setEditedPost({ ...editedPost, [e.target.name]: e.target.value });
+    setPost({ ...post, [e.target.name]: e.target.value });
   };
 
   const updatePost = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch(`http://localhost:8000/api/posts/${post.id}`, {
         method: 'PUT',
@@ -149,12 +140,10 @@ export default function PostDetails() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify(editedPost),
+        body: JSON.stringify(post),
       });
-  
-      const responseData = await response.json();
-  
-      if (responseData.retorno === 'Post atualizado!') {
+
+      if (response.ok) {
         fetchPost();
         window.location.reload();
       } else {
@@ -166,62 +155,68 @@ export default function PostDetails() {
     }
   };
 
-  if (post) {
   return (
     <div>
       <Navigation />
       <h2>Detalhes do Post</h2>
-      {
-      editMode ? 
-      <form className='newpost-form' onSubmit={updatePost}>
-      <div className='newpost-title'>
-        <label>Título:</label>
-        <input
-          type="text"
-          name="title"
-          value={editedPost.title}
-          onChange={handleInputChange}
-        />
-      </div>
-      <div className='newpost-content'>
-        <label>Conteúdo:</label>
-        <textarea
-          name="content"
-          value={editedPost.content}
-          onChange={handleInputChange}
-        ></textarea>
-      </div>
-      <div className='newpost-category'>
-        <label>Categoria:</label>
-        <select
-          name="category_id"
-          value={editedPost.category_id}
-          onChange={handleInputChange}
-        >
-          <option value="">Selecionar uma categoria</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <button className='newpost-button' type="submit">Criar post</button>
-    </form> : (
-        <div key={post.id}>
-          <p>ID: {post.id}</p>
-          <p>User: {post.user}</p>
-          <p>UserId: {post.user_id}</p>
-          <p>Category: {post.category}</p>
-          <p>Title: {post.title}</p>
-          <p>Content: {post.content}</p>
-          <p>Created At: {post.created_at}</p>
-          <p>Updated At: {post.updated_at}</p>
-          {post.user_id.toString() === localStorage.getItem('user_id') && <button onClick={handleEditButton}>Edit Post</button>}
-          {post.user_id.toString() === localStorage.getItem('user_id') && <button onClick={handleDeleteButton}>Delete Post</button>}
-        </div>
-      )
-      }
+      {editMode ? (
+        <form className="newpost-form" onSubmit={updatePost}>
+          <div className="newpost-title">
+            <label>Título:</label>
+            <input
+              type="text"
+              name="title"
+              value={post?.title || ''}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="newpost-content">
+            <label>Conteúdo:</label>
+            <textarea
+              name="content"
+              value={post?.content || ''}
+              onChange={handleInputChange}
+            ></textarea>
+          </div>
+          <div className="newpost-category">
+            <label>Categoria:</label>
+            <select
+              name="category_id"
+              value={post?.category_id || ''}
+              onChange={handleInputChange}
+            >
+              <option value="">Selecionar uma categoria</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <button className="newpost-button" type="submit">
+            Criar post
+          </button>
+        </form>
+      ) : (
+        post && (
+          <div key={post.id}>
+            <p>ID: {post.id}</p>
+            <p>User: {post.user}</p>
+            <p>UserId: {post.user_id}</p>
+            <p>Category: {post.category}</p>
+            <p>Title: {post.title}</p>
+            <p>Content: {post.content}</p>
+            <p>Created At: {post.created_at}</p>
+            <p>Updated At: {post.updated_at}</p>
+            {post.user_id.toString() === localStorage.getItem('user_id') && (
+              <button onClick={handleEditButton}>Edit Post</button>
+            )}
+            {post.user_id.toString() === localStorage.getItem('user_id') && (
+              <button onClick={handleDeleteButton}>Delete Post</button>
+            )}
+          </div>
+        )
+      )}
 
       <h2>Comentários</h2>
       {comments.length > 0 ? (
@@ -247,5 +242,4 @@ export default function PostDetails() {
       </form>
     </div>
   );
-  }
 }

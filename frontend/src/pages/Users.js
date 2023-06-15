@@ -3,6 +3,7 @@ import Navigation from '../components/Navigation';
 
 export default function Users() {
   const [users, setUsers] = useState([]);
+  const [error, setError] = useState('');
 
   const fetchUsers = async () => {
     try {
@@ -12,15 +13,15 @@ export default function Users() {
         const data = await response.json();
         setUsers(data);
       } else {
-        // Tratar caso de erro na requisição
+        setError('Erro na requisição');
         console.log('Erro na requisição');
       }
     } catch (error) {
-      // Tratar caso de erro na requisição
+      setError('Erro na requisição');
       console.log('Erro na requisição', error);
     }
   };
-  
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -28,14 +29,18 @@ export default function Users() {
   return (
     <>
       <Navigation />
-      <h1 className='users-title'>Users</h1>
-      <div className='users-box'>
-        {users.map((user, index) => (
-          <div className='user' key={index}>
-            <p className='user-name'>Name: {user.name}</p>
-            <p className='user-email'>Email: {user.email}</p>
-          </div>
-        ))}
+      <h1 className="users-title">Users</h1>
+      <div className="users-box">
+        {error ? (
+          <p className="users-error">{error}</p>
+        ) : (
+          users.map((user, index) => (
+            <div className="user" key={index}>
+              <p className="user-name">Name: {user.name}</p>
+              <p className="user-email">Email: {user.email}</p>
+            </div>
+          ))
+        )}
       </div>
     </>
   );

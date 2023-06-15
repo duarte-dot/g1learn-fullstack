@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
+
+  const handleInputChange = (e) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -15,12 +18,12 @@ export default function Login() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(credentials),
       });
 
       const data = await response.json();
-      const token = data.token;
-      const userId = data.user.id;
+      const { token, user } = data;
+      const userId = user.id;
 
       localStorage.setItem('user_id', userId);
       localStorage.setItem('token', token);
@@ -34,36 +37,38 @@ export default function Login() {
 
   return (
     <div>
-    <div>
-      <h2>Login</h2>
+      <div>
+        <h2>Login</h2>
 
-    <div className='login-form-box'>
-        <form className='login-form' onSubmit={handleLogin}>
-          <div className='login-email' >
-            <label htmlFor="email">email:</label>
-            <input
-              type="text"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className='login-password'>
-            <label htmlFor="password">senha:</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <button className='login-button' type="submit">Login</button>
-        </form>
+        <div className='login-form-box'>
+          <form className='login-form' onSubmit={handleLogin}>
+            <div className='login-email'>
+              <label htmlFor="email">Email:</label>
+              <input
+                type="text"
+                id="email"
+                name="email"
+                value={credentials.email}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className='login-password'>
+              <label htmlFor="password">Senha:</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={credentials.password}
+                onChange={handleInputChange}
+              />
+            </div>
+            <button className='login-button' type="submit">Login</button>
+          </form>
+        </div>
       </div>
-    </div>
-    <div>
-      <p>Novo usuário? <span onClick={() => navigate('/register')}>Registre-se</span> agora!</p>
-    </div>
+      <div>
+        <p>Novo usuário? <span onClick={() => navigate('/register')}>Registre-se</span> agora!</p>
+      </div>
     </div>
   );
 }

@@ -1,16 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '../components/Navigation';
+import PostForm from '../components/PostForm';
+import PostList from '../components/PostList';
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [newPost, setNewPost] = useState({ title: '', content: '', category_id: '' });
+  const [selectedCategory, setSelectedCategory] = useState('');
   const navigate = useNavigate();
 
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/posts', {
+      let url = 'http://localhost:8000/api/posts';
+      if (selectedCategory) {
+        url += `?category_id=${selectedCategory}`;
+      }
+
+      const response = await fetch(url, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -22,9 +30,9 @@ export default function Home() {
       alert('Houve um erro ao carregar os posts');
       console.log('Listar posts - Erro na requisição', error);
     }
-  };
+  }, [selectedCategory]);
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await fetch('http://localhost:8000/api/categories', {
         headers: {
@@ -32,32 +40,32 @@ export default function Home() {
         },
       });
 
-        const data = await response.json();
-        setCategories(data);
+      const data = await response.json();
+      setCategories(data);
     } catch (error) {
-      alert('Houve um erro ao carregar as categorias')
+      alert('Houve um erro ao carregar as categorias');
       console.log('Listar categorias - Erro na requisição', error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-      if (!token) {
-        alert('Erro de autorização')
-        navigate('/');
-      }
+    if (!token) {
+      alert('Erro de autorização');
+      navigate('/');
+    }
 
     fetchPosts();
     fetchCategories();
-  }, [navigate]);
+  }, [navigate, fetchPosts, fetchCategories]);
 
   const handleInputChange = (e) => {
-    setNewPost({ ...newPost, [e.target.name]: e.target.value });
+    setNewPost((prevPost) => ({ ...prevPost, [e.target.name]: e.target.value }));
   };
 
   const createPost = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch('http://localhost:8000/api/posts', {
         method: 'POST',
@@ -67,9 +75,9 @@ export default function Home() {
         },
         body: JSON.stringify(newPost),
       });
-  
+
       const responseData = await response.json();
-  
+
       if (responseData.retorno === 'Post criado!') {
         fetchPosts();
         setNewPost({ title: '', content: '', category_id: '' });
@@ -82,41 +90,28 @@ export default function Home() {
       console.log('Criar Post - Erro na requisição', error);
     }
   };
-  
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
 
   return (
     <div>
       <Navigation />
-
-      <h1 className='page-title'>Home</h1>
-
-      <h2 className='addnewpost-title' >Adicione uma nova discussão</h2>
-      <form className='newpost-form' onSubmit={createPost}>
-        <div className='newpost-title'>
-          <label>Título:</label>
-          <input
-            type="text"
-            name="title"
-            value={newPost.title}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className='newpost-content'>
-          <label>Conteúdo:</label>
-          <textarea
-            name="content"
-            value={newPost.content}
-            onChange={handleInputChange}
-          ></textarea>
-        </div>
-        <div className='newpost-category'>
+      <h1 className="page-title">Home</h1>
+      <h2 className="addnewpost-title">Adicione uma nova discussão</h2>
+      <PostForm
+        newPost={newPost}
+        categories={categories}
+        handleInputChange={handleInputChange}
+        createPost={createPost}
+      />
+      <h2 className="discussions-title">Discussões</h2>
+      {categories.length > 0 && (
+        <div className="category-selector">
           <label>Categoria:</label>
-          <select
-            name="category_id"
-            value={newPost.category_id}
-            onChange={handleInputChange}
-          >
-            <option value="">Selecionar uma categoria</option>
+          <select value={selectedCategory} onChange={handleCategoryChange}>
+            <option value="">Todas as categorias</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}
@@ -124,21 +119,8 @@ export default function Home() {
             ))}
           </select>
         </div>
-        <button className='newpost-button' type="submit">Criar post</button>
-      </form>
-
-      <h2 className='discussions-title'>Discussões</h2>
-      <div className='posts-box'>
-        {
-          posts.map((post) => (
-            <div key={post.id}>
-              <h3 className='post-title' onClick={() => navigate(`/posts/${post.id}`)}>{post.title}</h3>
-              <p>{post.category}</p>
-              <p className='post-content'>{post.content}</p>
-            </div>
-          ))
-        }
-      </div>
+      )}
+      <PostList posts={posts} navigate={navigate} />
     </div>
   );
 }
