@@ -57,9 +57,9 @@ export default function Home() {
 
   const createPost = async (e) => {
     e.preventDefault();
-
+  
     try {
-      await fetch('http://localhost:8000/api/posts', {
+      const response = await fetch('http://localhost:8000/api/posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,14 +67,22 @@ export default function Home() {
         },
         body: JSON.stringify(newPost),
       });
-
+  
+      const responseData = await response.json();
+  
+      if (responseData.retorno === 'Post criado!') {
         fetchPosts();
         setNewPost({ title: '', content: '', category_id: '' });
+        console.log(responseData);
+      } else {
+        alert('Erro ao criar o post. Verifique os campos e tente novamente.');
+      }
     } catch (error) {
       alert('Erro na criação do post');
       console.log('Criar Post - Erro na requisição', error);
     }
   };
+  
 
   return (
     <div>

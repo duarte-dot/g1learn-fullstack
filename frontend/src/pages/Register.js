@@ -22,7 +22,9 @@ export default function Register() {
 
       const data = await response.json();
       const token = data.token;
+      const userId = data.user.id;
 
+      localStorage.setItem('user_id', userId);
       localStorage.setItem('token', token)
 
       navigate('/home');
@@ -42,6 +44,7 @@ export default function Register() {
         <div className='register-name'>
             <label htmlFor="name">name:</label>
             <input
+              required
               type="text"
               id="name"
               value={name}
@@ -51,6 +54,7 @@ export default function Register() {
           <div className='register-email'>
             <label htmlFor="email">email:</label>
             <input
+              required
               type="email"
               id="email"
               value={email}
@@ -60,6 +64,7 @@ export default function Register() {
           <div className='register-password'>
             <label htmlFor="password">senha:</label>
             <input
+              required
               type="password"
               id="password"
               value={password}
@@ -67,8 +72,9 @@ export default function Register() {
             />
           </div>
           <div className='register-passwordConfirmation'>
-            <label htmlFor="passwordConfirmation">senha:</label>
+            <label htmlFor="passwordConfirmation">confirme sua senha:</label>
             <input
+              required
               type="password"
               id="passwordConfirmation"
               value={password_confirmation}

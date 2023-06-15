@@ -36,6 +36,7 @@ class PostController extends Controller
 
     $formattedPost = [
         'id' => $post->id,
+        'user_id' => $post->user->id,
         'user' => $post->user->name,
         'category' => $post->category->name,
         'title' => $post->title,
@@ -81,6 +82,11 @@ class PostController extends Controller
             return ['retorno' => 'erro', 'mensagem' => 'Post não existe'];
         }
 
+        $user = auth()->user();
+        if ($post->user_id !== $user->id) {
+            return ['retorno' => 'erro', 'mensagem' => 'Você não tem permissão para editar este post'];
+        }
+
         $post->title = $request->title;
         $post->content = $request->content;
         $post->category_id = $request->category_id;
@@ -112,6 +118,11 @@ class PostController extends Controller
 
       if (!$post) {
         return ['retorno' => 'erro', 'mensagem' => 'Post não existe'];
+      }
+
+      $user = auth()->user();
+      if ($post->user_id !== $user->id) {
+          return ['retorno' => 'erro', 'mensagem' => 'Você não tem permissão para deletar este post'];
       }
 
       $post->delete();

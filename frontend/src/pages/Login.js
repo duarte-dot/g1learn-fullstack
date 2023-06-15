@@ -20,8 +20,10 @@ export default function Login() {
 
       const data = await response.json();
       const token = data.token;
+      const userId = data.user.id;
 
-      localStorage.setItem('token', token)
+      localStorage.setItem('user_id', userId);
+      localStorage.setItem('token', token);
 
       navigate('/home');
     } catch (error) {

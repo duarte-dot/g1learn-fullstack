@@ -99,7 +99,16 @@ class CommentController extends Controller
   public function updateComment(Request $request, $id) {
     try {
         $user = auth()->user();
-        $comment = Comment::findOrFail($id);
+        $comment = Comment::find($id);
+
+        if (!$comment) {
+          return ['retorno' => 'erro', 'mensagem' => 'Comentário não existe'];
+        }
+
+        $user = auth()->user();
+        if ($comment->user_id !== $user->id) {
+            return ['retorno' => 'erro', 'mensagem' => 'Você não tem permissão para editar este comentário'];
+        }
 
         $comment->content = $request->content;
         $comment->save();
@@ -127,6 +136,11 @@ class CommentController extends Controller
 
         if (!$comment) {
             return ['retorno' => 'erro', 'mensagem' => 'Comentário não existe'];
+        }
+
+        $user = auth()->user();
+        if ($comment->user_id !== $user->id) {
+            return ['retorno' => 'erro', 'mensagem' => 'Você não tem permissão para editar este comentário'];
         }
 
         $comment->delete();
