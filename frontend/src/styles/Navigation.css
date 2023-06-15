@@ -1,0 +1,19 @@
+.header-menu {
+  display: flex;
+  justify-content: space-between;;
+}
+
+.header-menu span {
+  align-self: center;
+  font-size: 20px;  
+}
+
+.header-menu ul {
+  display: flex;
+}
+
+.header-menu li {
+  padding-right: 20px;
+  list-style-type: none;
+}
+
