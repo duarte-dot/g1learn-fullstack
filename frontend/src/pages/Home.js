@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import PostForm from '../components/PostForm';
 import PostList from '../components/PostList';
+import '../styles/Home.css'
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -96,31 +97,33 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <>
       <Navigation />
-      <h1 className="page-title">Home</h1>
-      <h2 className="addnewpost-title">Adicione uma nova discussão</h2>
-      <PostForm
-        newPost={newPost}
-        categories={categories}
-        handleInputChange={handleInputChange}
-        createPost={createPost}
-      />
-      <h2 className="discussions-title">Discussões</h2>
-      {categories.length > 0 && (
-        <div className="category-selector">
-          <label>Categoria:</label>
-          <select value={selectedCategory} onChange={handleCategoryChange}>
-            <option value="">Todas as categorias</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-      <PostList posts={posts} navigate={navigate} />
-    </div>
+      <div className='home-page'>
+        <h1 className="page-title">Home</h1>
+        <h2 className="addnewpost-title">Adicione uma nova discussão</h2>
+        <PostForm
+          newPost={newPost}
+          categories={categories}
+          handleInputChange={handleInputChange}
+          createPost={createPost}
+        />
+        <h2 className="discussions-title">Discussões</h2>
+        {categories.length > 0 && (
+          <div className="category-selector">
+            <label>Categoria: </label>
+            <select value={selectedCategory} onChange={handleCategoryChange}>
+              <option value="">Todas as categorias</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+        <PostList posts={posts} navigate={navigate} />
+      </div>
+    </>
   );
 }

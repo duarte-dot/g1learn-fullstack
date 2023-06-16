@@ -5,6 +5,7 @@ import Users from './pages/Users';
 import Login from './pages/Login';
 import PostDetails from './pages/Post';
 import Register from './pages/Register';
+import './index.css'
 
 const App = () => {
   return (

@@ -5,11 +5,11 @@ const PostForm = ({ newPost, categories, handleInputChange, createPost }) => {
     <form className="newpost-form" onSubmit={createPost}>
       <div className="newpost-title">
         <label>Título:</label>
-        <input type="text" name="title" value={newPost.title} onChange={handleInputChange} />
+        <input className='newpost-title-input' type="text" name="title" value={newPost.title} onChange={handleInputChange} />
       </div>
       <div className="newpost-content">
         <label>Conteúdo:</label>
-        <textarea name="content" value={newPost.content} onChange={handleInputChange}></textarea>
+        <textarea className='newpost-content-textarea' name="content" value={newPost.content} onChange={handleInputChange}></textarea>
       </div>
       <div className="newpost-category">
         <label>Categoria:</label>

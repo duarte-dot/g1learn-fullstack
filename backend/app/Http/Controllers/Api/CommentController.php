@@ -8,14 +8,14 @@ use App\Models\Comment;
 
 class CommentController extends Controller
 {
-    public function list()
-    {
+    public function list() {
         $comments = Comment::with(['post', 'user'])->get();
 
         $formattedComments = $comments->map(function ($comment) {
             return [
                 'id' => $comment->id,
                 'user' => $comment->user->name,
+                'user_id' => $comment->user->id,
                 'post_id' => $comment->post->id,
                 'content' => $comment->content,
                 'created_at' => $comment->created_at,
@@ -26,16 +26,25 @@ class CommentController extends Controller
         return $formattedComments;
     }
 
-    public function select($id)
-    {
-        $comment = Comment::find($id);
+    public function select($id) {
+    $comment = Comment::with(['post', 'user'])->find($id);
 
-        if (!$comment) {
-            return response()->json(['retorno' => 'erro', 'mensagem' => 'Comentário não existe']);
-        }
-
-        return $comment;
+    if (!$comment) {
+        return response()->json(['retorno' => 'erro', 'mensagem' => 'Comentário não existe']);
     }
+
+    $formattedComment = [
+        'id' => $comment->id,
+        'user' => $comment->user->name,
+        'user_id' => $comment->user->id,
+        'post_id' => $comment->post->id,
+        'content' => $comment->content,
+        'created_at' => $comment->created_at,
+        'updated_at' => $comment->updated_at
+    ];
+
+    return $formattedComment;
+}
 
     public function add(Request $request)
     {
@@ -87,6 +96,7 @@ class CommentController extends Controller
             return [
                 'id' => $comment->id,
                 'user' => $comment->user->name,
+                'user_id' => $comment->user->id,
                 'post_id' => $comment->post->id,
                 'content' => $comment->content,
                 'created_at' => $comment->created_at,

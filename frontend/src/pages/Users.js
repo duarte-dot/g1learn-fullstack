@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navigation from '../components/Navigation';
+import '../styles/Users.css'
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -29,18 +30,20 @@ export default function Users() {
   return (
     <>
       <Navigation />
-      <h1 className="users-title">Users</h1>
-      <div className="users-box">
-        {error ? (
-          <p className="users-error">{error}</p>
-        ) : (
-          users.map((user, index) => (
-            <div className="user" key={index}>
-              <p className="user-name">Name: {user.name}</p>
-              <p className="user-email">Email: {user.email}</p>
-            </div>
-          ))
-        )}
+      <div className='users-page'>
+        <h1 className="users-title">Users</h1>
+        <div className="users-box">
+          {error ? (
+            <p className="users-error">{error}</p>
+          ) : (
+            users.map((user, index) => (
+              <div className="user" key={index}>
+                <p className="user-name">Name: {user.name}</p>
+                <p className="user-email">Email: {user.email}</p>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </>
   );

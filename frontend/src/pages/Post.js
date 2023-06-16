@@ -1,13 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navigation from '../components/Navigation';
+import '../styles/Post.css'
+
 
 export default function PostDetails() {
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
+  const [editedComment, setEditedComment] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [commentEditMode, setCommentEditMode] = useState();
+  const [editedComments, setEditedComments] = useState([]);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -102,6 +107,27 @@ export default function PostDetails() {
     }
   };
 
+  const handleDeleteCommentButton = async (commentId) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/comments/${commentId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      const responseData = await response.json();
+
+      if (responseData.retorno === 'Comentário excluído com sucesso') {
+        fetchComments();
+      } else {
+        console.log('Erro na requisição');
+      }
+    } catch (error) {
+      console.log('Erro na requisição', error);
+    }
+  };
+
   const handleNewCommentSubmit = async (e) => {
     e.preventDefault();
 
@@ -147,7 +173,7 @@ export default function PostDetails() {
         fetchPost();
         window.location.reload();
       } else {
-        alert('Erro ao criar o post. Verifique os campos e tente novamente.');
+        alert('Erro ao editar o post. Verifique os campos e tente novamente.');
       }
     } catch (error) {
       alert('Erro na criação do post');
@@ -175,9 +201,35 @@ export default function PostDetails() {
     return `${dataFormatada} às ${horaFormatada}`;
   };
   
+  const handleUpdateComment = async (e, commentId) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`http://localhost:8000/api/comments/${commentId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ content: editedComment }),
+      });
+  
+      const responseData = await response.json();
+  
+      if (responseData.retorno === 'Comentário atualizado!') {
+        setEditedComment('');
+        fetchComments();
+        setCommentEditMode(null);
+        setEditedComments((prevEditedComments) => [...prevEditedComments, commentId]);
+      } else {
+        console.log('Erro na requisição');
+      }
+    } catch (error) {
+      console.log('Erro na requisição', error);
+    }
+  };
 
   return (
-    <div>
+    <div className='post-page'>
       <Navigation />
       {editMode ? (
         <form className="newpost-form" onSubmit={updatePost}>
@@ -219,7 +271,8 @@ export default function PostDetails() {
         </form>
       ) : (
         post && (
-          <div key={post.id}>
+          <div className='post-page' key={post.id}>
+            <div className='post-box'>
             <h1>{post.title}</h1>
             <p>Criado por {post.user}, em {formatarDataHora(post.created_at)}</p>
             <p>Categoria: {post.category}</p>
@@ -231,31 +284,62 @@ export default function PostDetails() {
             {post.user_id.toString() === localStorage.getItem('user_id') && (
               <button onClick={handleDeleteButton}>Delete Post</button>
             )}
+            </div>
           </div>
         )
       )}
 
-      <h2>Comentários</h2>
+      <h2 className='comments-title'>Comentários</h2>
       {comments.length > 0 ? (
         comments.map((comment) => (
-          <div key={comment.id}>
-            <p><strong>{comment.user}</strong>, {formatarDataHora(comment.created_at)}</p>
-            <p>{comment.content}</p>
+          <div className='comments' key={comment.id}>
+            {commentEditMode === comment.id ? (
+              <>
+              <p className='comment-user'>
+                  <strong>{comment.user}</strong>, {formatarDataHora(comment.created_at)}
+              </p>
+              <form onSubmit={(e) => handleUpdateComment(e, comment.id)}>
+                <input
+                  type='text'
+                  value={editedComment}
+                  onChange={(e) => setEditedComment(e.target.value)}
+                />
+                <button type='submit'>Save</button>
+              </form>
+              </>
+            ) : (
+              <>
+                <p className='comment-user'>
+                  <strong>{comment.user}</strong>, {formatarDataHora(comment.created_at)}
+                  {editedComments.includes(comment.id) && <span className='edited-text'>(editado)</span>}
+                </p>
+                <p className='comment-content'>{comment.content}</p>
+                {comment.user_id.toString() === localStorage.getItem('user_id') && (
+                  <button onClick={() => setCommentEditMode(comment.id)}>Edit</button>
+                )}
+                {comment.user_id.toString() === localStorage.getItem('user_id') && (
+                  <button onClick={() => handleDeleteCommentButton(comment.id)}>Delete</button>
+                )}
+              </>
+            )}
           </div>
         ))
       ) : (
-        <p>Sem comentários</p>
+        <p>No comments available</p>
       )}
 
-      <h2>Adicionar Comentário</h2>
-      <form onSubmit={handleNewCommentSubmit}>
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="Digite seu comentário..."
-        />
-        <button type="submit">Enviar</button>
-      </form>
+      <h2 className='add-comment'>Adicionar Comentário</h2>
+        <form className='comment-form' onSubmit={handleNewCommentSubmit}>
+        <div>
+          <textarea
+            className='comment-textarea'
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Digite seu comentário..."
+          />
+        </div>
+        <button className='comment-button' type="submit">Enviar</button>
+        </form>
     </div>
   );
 }

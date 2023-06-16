@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/Navigation.css'
+import '../styles/Navigation.css';
 
 const navLinks = [
   {
@@ -48,15 +48,30 @@ const handleLogout = () => {
     });
 };
 
-export default function Navigation() {
+const Navigation = () => {
+  const [withShadow, setWithShadow] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const position = window.pageYOffset;
+      setWithShadow(position > 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <nav className="header-menu">
-      <span>G1 Learn - Fórum</span>
+    <nav className={`header-menu${withShadow ? ' with-shadow' : ''}`}>
+      <img className='header-logo' src='https://g1learn.com/logo-g1.png?imwidth=256' alt='logo' />
       <ul className="header-menu-list">
         {navLinks.map((link) => (
           <li key={link.path}>
             {link.logout ? (
-              <button onClick={handleLogout}>{link.title}</button>
+              <button className='button-logout' onClick={handleLogout}>{link.title}</button>
             ) : (
               <Link to={link.path} alt={link.title}>
                 {link.title}
@@ -67,4 +82,6 @@ export default function Navigation() {
       </ul>
     </nav>
   );
-}
+};
+
+export default Navigation;
