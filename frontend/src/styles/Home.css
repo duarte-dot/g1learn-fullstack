@@ -1,3 +1,86 @@
 .home-page {
   margin: 20px;
 }
+
+.newpost-title-input,
+.newpost-content-textarea {
+  resize: none;
+  max-width: 100%;
+}
+
+.newpost-content-textarea {
+  height: 100px;
+}
+
+.addnewpost-title {
+  margin-top: 35px;
+  font-size: 1.3em;
+}
+
+.newpost-form {
+  max-width: 85vw;
+}
+
+.newpost-title,
+.newpost-content,
+.newpost-category {
+  margin-bottom: 10px;
+}
+
+.newpost-title label,
+.newpost-content label,
+.newpost-category label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.newpost-title input,
+.newpost-content textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.newpost-category select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 99%;
+}
+
+@media screen and (min-width: 992px) {
+  .newpost-title input,
+  .newpost-content textarea {
+    max-width: 40%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .newpost-category select {
+    max-width: 41%;
+  }
+}
+
+.newpost-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.newpost-button:hover {
+  background-color: #0056b3;
+}
+
+.newpost-button:active {
+  background-color: #004699;
+}
+
+.newpost-title {
+  width: 100%;
+}

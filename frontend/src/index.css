@@ -21,3 +21,35 @@ html {
 .App {
   margin: 0;
 }
+
+/* Largura e cor da scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  background-color: #f1f1f1;
+}
+
+/* Cor da thumb (alça) da scrollbar */
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+}
+
+/* Efeito de hover na thumb */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+/* Estilo da thumb quando estiver pressionada */
+::-webkit-scrollbar-thumb:active {
+  background-color: #333;
+}
+
+/* Estilo do track (fundo da scrollbar) */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+/* Efeito de hover no track */
+::-webkit-scrollbar-track:hover {
+  background-color: #eaeaea;
+}

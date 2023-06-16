@@ -5,7 +5,7 @@ const PostForm = ({ newPost, categories, handleInputChange, createPost }) => {
     <form className="newpost-form" onSubmit={createPost}>
       <div className="newpost-title">
         <label>Título:</label>
-        <input className='newpost-title-input' type="text" name="title" value={newPost.title} onChange={handleInputChange} />
+        <input className='newpost-title-input' maxLength='45' type="text" name="title" value={newPost.title} onChange={handleInputChange} />
       </div>
       <div className="newpost-content">
         <label>Conteúdo:</label>

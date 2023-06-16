@@ -8,10 +8,16 @@
 
 .register-form-box {
   margin: 20px auto;
-  width: 300px;
+  width: 80%;
   padding: 20px;
   background-color: #f0f0f0;
   border-radius: 4px;
+}
+
+@media screen and (min-width: 400px) {
+  .register-form-box {
+    width: 300px;
+  }
 }
 
 .register-form {

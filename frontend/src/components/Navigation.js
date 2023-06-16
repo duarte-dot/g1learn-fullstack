@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Navigation.css';
+import { UilMultiply, UilBars, UilSignout } from '@iconscout/react-unicons';
 
 const navLinks = [
   {
@@ -11,16 +12,11 @@ const navLinks = [
     title: 'Usuários',
     path: '/users',
   },
-  {
-    title: 'Logout',
-    path: '/',
-    logout: true,
-  },
 ];
 
 const handleLogout = () => {
   const token = localStorage.getItem('token');
-  
+
   if (!token) {
     window.location.href = '/';
     return;
@@ -30,7 +26,7 @@ const handleLogout = () => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   })
     .then((response) => {
@@ -50,6 +46,9 @@ const handleLogout = () => {
 
 const Navigation = () => {
   const [withShadow, setWithShadow] = useState(false);
+  const [showingMenu, setShowingMenu] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,29 +56,102 @@ const Navigation = () => {
       setWithShadow(position > 0);
     };
 
+    const handleResize = () => {
+      if (window.innerWidth >= 992) {
+        setShowingMenu(false);
+      } else {
+        setShowingMenu(true);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 992) {
+        setShowingMenu(false);
+      } else {
+        setShowingMenu(true);
+      }
+    };
+
+    handleResize();
+  }, []);
+
+  const toggleMenu = () => {
+    if (window.innerWidth >= 992) {
+      setShowMenu(false);
+    }
+    setShowMenu(!showMenu);
+  };
+
   return (
-    <nav className={`header-menu${withShadow ? ' with-shadow' : ''}`}>
-      <img className='header-logo' src='https://g1learn.com/logo-g1.png?imwidth=256' alt='logo' />
-      <ul className="header-menu-list">
-        {navLinks.map((link) => (
-          <li className='nav-link' key={link.path}>
-            {link.logout ? (
-              <button className='button-logout' onClick={handleLogout}>{link.title}</button>
-            ) : (
-              <Link to={link.path} alt={link.title}>
-                {link.title}
-              </Link>
-            )}
-          </li>
-        ))}
-      </ul>
+    <nav
+      className={`header-menu ${
+        showMenu ? 'header-menu-showing' : ''
+      } ${withShadow ? 'with-shadow' : ''}`}
+    >
+      <div className="logo-and-icons">
+        <img
+          onClick={() => navigate('/home')}
+          className="header-logo"
+          src="https://g1learn.com/logo-g1.png?imwidth=256"
+          alt="logo"
+        />
+        <ul className='big-screen-nav-links' style={!showMenu && !showingMenu ? {display: 'flex'} : {display: 'none' }}>
+          {navLinks.map((link) => (
+            <li
+              className="nav-link-2"
+              onClick={() => navigate(`${link.path}`)}
+              key={link.path}
+            >
+              {link.title}
+            </li>
+          ))}
+          <button className='button-logout' onClick={handleLogout}>Sair</button>
+        </ul>
+        {window.innerWidth < 992 && (
+          <div className="logout-and-menu">
+            <UilSignout
+              className="sign-out-icon"
+              size={50}
+              onClick={handleLogout}
+            />
+            <UilMultiply
+              size={50}
+              className="toggle-close-menu"
+              style={showMenu ? { display: 'block' } : { display: 'none' }}
+              onClick={toggleMenu}
+            />
+            <UilBars
+              size={50}
+              className="toggle-menu"
+              style={showMenu ? { display: 'none' } : { display: 'block' }}
+              onClick={toggleMenu}
+            />
+          </div>
+        )}
+      </div>
+      <div className={withShadow ? '' : 'div-header-menu-list'}>
+        <ul className={showMenu  && showingMenu ? 'header-menu-list showing' : 'header-menu-list'}>
+          {navLinks.map((link) => (
+            <li
+              className="nav-link"
+              onClick={() => navigate(`${link.path}`)}
+              key={link.path}
+            >
+              {link.title}
+            </li>
+          ))}
+        </ul>
+      </div>
     </nav>
   );
 };

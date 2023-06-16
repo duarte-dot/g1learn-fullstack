@@ -1,11 +1,6 @@
 .post-page {
-  margin: 15px;
-  margin-top: 100px;
-}
-
-.addnewpost-title {
-  margin-top: 35px;
-  font-size: 1.3em;
+  padding: 15px;
+  margin-top: 20px;
 }
 
 .discussions-title {
@@ -18,50 +13,6 @@
   padding: 20px;
   margin-top: 10px;
   border-radius: 5px;
-}
-
-.newpost-form {
-  max-width: 400px;
-}
-
-.newpost-title,
-.newpost-content,
-.newpost-category {
-  margin-bottom: 10px;
-}
-
-.newpost-title label,
-.newpost-content label,
-.newpost-category label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.newpost-title input,
-.newpost-content textarea,
-.newpost-category select {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.newpost-button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.newpost-button:hover {
-  background-color: #0056b3;
-}
-
-.newpost-button:active {
-  background-color: #004699;
 }
 
 .category-selector {
@@ -85,6 +36,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   grid-gap: 20px;
+  max-width: 98%;
 }
 
 .post {
@@ -94,6 +46,19 @@
   margin-top: 10px;
   border-radius: 5px;
   cursor: pointer;
+  max-width: 248px;
+}
+
+@media screen and (min-width: 375px) {
+  .post {
+    max-width: 310px;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .post {
+    max-width: 600px;
+  }
 }
 
 .post-title {
@@ -160,7 +125,7 @@
   resize: none;
   padding: 5px;
   margin-bottom: 10px;
-  width: 40%;
+  width: 80%;
 }
 
 .comment-button {
@@ -175,15 +140,7 @@
   background-color: #45a049;
 }
 
-.newpost-title-input,
-.newpost-content-textarea {
-  resize: none;
-  max-width: 96%;
-}
 
-.newpost-content-textarea {
-  height: 100px;
-}
 
 .comment-edited-text {
   font-size: 12px;
