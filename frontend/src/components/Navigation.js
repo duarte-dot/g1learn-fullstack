@@ -69,7 +69,7 @@ const Navigation = () => {
       <img className='header-logo' src='https://g1learn.com/logo-g1.png?imwidth=256' alt='logo' />
       <ul className="header-menu-list">
         {navLinks.map((link) => (
-          <li key={link.path}>
+          <li className='nav-link' key={link.path}>
             {link.logout ? (
               <button className='button-logout' onClick={handleLogout}>{link.title}</button>
             ) : (

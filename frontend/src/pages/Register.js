@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/Register.css'
 
 export default function Register() {
   const navigate = useNavigate();
@@ -42,54 +43,57 @@ export default function Register() {
 
   return (
     <div>
-      <h2>Registre-se</h2>
-      <div className="register-form-box">
-        <form className="register-form" onSubmit={handleRegister}>
-          <div className="register-name">
-            <label htmlFor="name">Nome:</label>
-            <input
-              required
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div className="register-email">
-            <label htmlFor="email">Email:</label>
-            <input
-              required
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="register-password">
-            <label htmlFor="password">Senha:</label>
-            <input
-              required
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className="register-passwordConfirmation">
-            <label htmlFor="passwordConfirmation">Confirme sua senha:</label>
-            <input
-              required
-              type="password"
-              id="passwordConfirmation"
-              value={passwordConfirmation}
-              onChange={(e) => setPasswordConfirmation(e.target.value)}
-            />
-          </div>
-          {error && <p className="register-error">{error}</p>}
-          <button className="register-button" type="submit">
-            Registrar
-          </button>
-        </form>
+      <div className='register-page'>
+        <h2>Registre-se</h2>
+        <div className="register-form-box">
+          <form className="register-form" onSubmit={handleRegister}>
+            <div className="register-name">
+              <label htmlFor="name">Nome:</label>
+              <input
+                required
+                type="text"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div className="register-email">
+              <label htmlFor="email">Email:</label>
+              <input
+                required
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="register-password">
+              <label htmlFor="password">Senha:</label>
+              <input
+                required
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="register-passwordConfirmation">
+              <label htmlFor="passwordConfirmation">Confirme sua senha:</label>
+              <input
+                required
+                type="password"
+                id="passwordConfirmation"
+                value={passwordConfirmation}
+                onChange={(e) => setPasswordConfirmation(e.target.value)}
+              />
+            </div>
+            {error && <p className="register-error">{error}</p>}
+            <button className="register-button" type="submit">
+              Registrar
+            </button>
+          </form>
+        </div>
+        <p className='login-now'>Já registrado? <span onClick={() => navigate('/')}>Faça login!</span></p>
       </div>
     </div>
   );

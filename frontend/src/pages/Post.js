@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navigation from '../components/Navigation';
+import { UilEditAlt, UilTrashAlt } from '@iconscout/react-unicons'
 import '../styles/Post.css'
 
 
@@ -69,11 +70,9 @@ export default function PostDetails() {
         const data = await response.json();
         setCategories(data);
       } else {
-        alert('Houve um erro ao carregar as categorias');
         console.log('Listar categorias - Erro na requisição');
       }
     } catch (error) {
-      alert('Houve um erro ao carregar as categorias');
       console.log('Listar categorias - Erro na requisição', error);
     }
   }, []);
@@ -176,8 +175,8 @@ export default function PostDetails() {
         alert('Erro ao editar o post. Verifique os campos e tente novamente.');
       }
     } catch (error) {
-      alert('Erro na criação do post');
-      console.log('Criar Post - Erro na requisição', error);
+      alert('Erro na edição do post');
+      console.log('Editar Post - Erro na requisição', error);
     }
   };
 
@@ -298,34 +297,36 @@ export default function PostDetails() {
               <p className='comment-user'>
                   <strong>{comment.user}</strong>, {formatarDataHora(comment.created_at)}
               </p>
-              <form onSubmit={(e) => handleUpdateComment(e, comment.id)}>
-                <input
-                  type='text'
+              <form className='form-input-edit-comment' onSubmit={(e) => handleUpdateComment(e, comment.id)}>
+                <textarea
+                  className='input-edit-comment'
                   value={editedComment}
                   onChange={(e) => setEditedComment(e.target.value)}
                 />
-                <button type='submit'>Save</button>
+                <button className='edit-button-send' type='submit'>Editar</button>
               </form>
               </>
             ) : (
               <>
                 <p className='comment-user'>
-                  <strong>{comment.user}</strong>, {formatarDataHora(comment.created_at)}
-                  {editedComments.includes(comment.id) && <span className='edited-text'>(editado)</span>}
+                  <strong>{comment.user}</strong>, <span className='comment-data-horario'>{formatarDataHora(comment.created_at)}</span>
+                  {editedComments.includes(comment.id) && <span className='comment-edited-text'>(editado)</span>}
                 </p>
                 <p className='comment-content'>{comment.content}</p>
+                <div className='comment-buttons'>
                 {comment.user_id.toString() === localStorage.getItem('user_id') && (
-                  <button onClick={() => setCommentEditMode(comment.id)}>Edit</button>
+                  <button className='button-edit-comment' onClick={() => setCommentEditMode(comment.id)}>< UilEditAlt /></button>
                 )}
                 {comment.user_id.toString() === localStorage.getItem('user_id') && (
-                  <button onClick={() => handleDeleteCommentButton(comment.id)}>Delete</button>
+                  <button className='button-delete-comment' onClick={() => handleDeleteCommentButton(comment.id)}>< UilTrashAlt /></button>
                 )}
+                </div>
               </>
             )}
           </div>
         ))
       ) : (
-        <p>No comments available</p>
+        <p>Sem comentários</p>
       )}
 
       <h2 className='add-comment'>Adicionar Comentário</h2>

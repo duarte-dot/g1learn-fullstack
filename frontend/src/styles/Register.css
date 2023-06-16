@@ -1,0 +1,68 @@
+.register-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.register-form-box {
+  margin: 20px auto;
+  width: 300px;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.register-name,
+.register-email,
+.register-password,
+.register-passwordConfirmation {
+  margin-bottom: 15px;
+}
+
+.register-name label,
+.register-email label,
+.register-password label,
+.register-passwordConfirmation label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.register-name input,
+.register-email input,
+.register-password input,
+.register-passwordConfirmation input {
+  width: 90%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.register-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.register-error {
+  color: #ff0000;
+  margin-top: 10px;
+}
+
+.login-now span {
+  color: #0056b3;
+  cursor: pointer;
+}
+  
+.login-now span:hover {
+  text-decoration: underline;
+}

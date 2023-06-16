@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/Login.css'
 
 export default function Login() {
   const navigate = useNavigate();
@@ -37,9 +38,8 @@ export default function Login() {
 
   return (
     <div>
-      <div>
+      <div className='page-login'>
         <h2>Login</h2>
-
         <div className='login-form-box'>
           <form className='login-form' onSubmit={handleLogin}>
             <div className='login-email'>
@@ -65,9 +65,7 @@ export default function Login() {
             <button className='login-button' type="submit">Login</button>
           </form>
         </div>
-      </div>
-      <div>
-        <p>Novo usuário? <span onClick={() => navigate('/register')}>Registre-se</span> agora!</p>
+        <p className='register-now'>Novo usuário? <span onClick={() => navigate('/register')}>Registre-se</span> agora!</p>
       </div>
     </div>
   );

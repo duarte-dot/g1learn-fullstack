@@ -64,3 +64,24 @@
 .button-logout:active {
   background-color: #b71c1c;
 }
+
+
+/*  */
+
+.nav-link {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.nav-link a {
+  color: #000;
+  text-decoration: none;
+}
+
+.nav-link a:hover {
+  transform: scale(1.05);
+}
+
+.button-logout:hover {
+  background-color: #cc0000;
+}

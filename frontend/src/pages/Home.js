@@ -28,7 +28,6 @@ export default function Home() {
       const data = await response.json();
       setPosts(data);
     } catch (error) {
-      alert('Houve um erro ao carregar os posts');
       console.log('Listar posts - Erro na requisição', error);
     }
   }, [selectedCategory]);
@@ -44,7 +43,6 @@ export default function Home() {
       const data = await response.json();
       setCategories(data);
     } catch (error) {
-      alert('Houve um erro ao carregar as categorias');
       console.log('Listar categorias - Erro na requisição', error);
     }
   }, []);
