@@ -1,6 +1,10 @@
 # Desafio - G1Learn Fullstack
 
-Este é um projeto que combina o backend em PHP utilizando o framework Laravel e o frontend em React. O projeto foi desenvolvido com o objetivo de concluir o desafio da G1learn.
+Este é um projeto que combina o backend em PHP utilizando o framework Laravel e o frontend em React, usando também o banco de dados MySQL. O projeto foi desenvolvido com o objetivo de concluir o desafio da G1learn.
+
+Todo o app está conteinerizado com o Docker 🐋!
+
+Todas as informações, como posts criados, comentários e usuários registrados serão guardados no banco de dados.
 
 ## Configuração do Ambiente
 
@@ -122,4 +126,15 @@ Você pode tentar acessar as rotas via algum aplicativo de requisição. Há tam
 ### Sistemas de CRUD:
 <img src="https://github.com/duarte-dot/g1learn-fullstack/assets/78454964/38f3df36-2646-471a-ad28-b5fc9831dc0c" alt="Home" width="600">
 
+## Adicionais
 
+Pretendo continuar trabalhando no projeto e adicionando mais features. Se você tem alguma sugestão, Não deixe de me informar! (Ou, fique à vontade para contribuir e adicionar)
+
+Celular / Whatsapp: (21) 9 7568-1618
+Email: gabrieldvr@outlook.com
+Linkedin: https://www.linkedin.com/in/gabriel-duarte-dev/
+
+Features que ainda estou pensando em adicionar:
+- Criação de categorias através do Front-End. (Já é possível através das rotas com requisições)
+- Fotos de perfil para os usuários
+- Testes unitários
