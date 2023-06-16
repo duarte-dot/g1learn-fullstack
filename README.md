@@ -16,17 +16,16 @@ Antes de começar a usar o projeto, é necessário configurar o ambiente de dese
 
 exemplo: `git clone git@github.com:duarte-dot/g1learn-fullstack.git`
 
-### 2. Inicie o projeto usando docker-compose:
-
-na pasta do projeto, abra um terminal e utilize o comando `docker-compose up -d`
-
-### 3. Configure as variáveis de ambiente do backend:
+### 2. Configure as variáveis de ambiente do backend:
 
 modifique o arquivo env.example pasta backend/env.example para ".env"
 (o arquivo deve ficar assim):
 
 <img src="https://github.com/duarte-dot/g1learn-fullstack/assets/78454964/ba3b7cea-ec74-4d9a-acdb-ad68669bfc0c" alt="Tela de login" width="600">
 
+### 3. Inicie o projeto usando docker-compose:
+
+na pasta do projeto, abra um terminal e utilize o comando `docker-compose up -d`
 
 ### 4. Execute as migrações e semeie o banco de dados
 
