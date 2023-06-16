@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Navigation from '../components/Navigation';
-import '../styles/Users.css'
+import '../styles/Users.css';
 import { useNavigate } from 'react-router-dom';
 
 export default function Users() {
@@ -14,15 +14,16 @@ export default function Users() {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
-        }})
+        },
+      });
 
       if (response.ok) {
         const data = await response.json();
         setUsers(data);
       } else {
-        alert('Erro de autorização');
-        navigate('/')
+        setError('Erro de autorização');
         console.log('GET Users - Erro na requisição');
+        navigate('/');
       }
     } catch (error) {
       setError('Erro de autorização');

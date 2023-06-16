@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navigation from '../components/Navigation';
-import { UilEditAlt, UilTrashAlt } from '@iconscout/react-unicons'
-import '../styles/Post.css'
-
+import { UilEditAlt, UilTrashAlt } from '@iconscout/react-unicons';
+import '../styles/Post.css';
 
 export default function PostDetails() {
   const [post, setPost] = useState(null);
@@ -153,7 +152,10 @@ export default function PostDetails() {
   };
 
   const handleInputChange = (e) => {
-    setPost({ ...post, [e.target.name]: e.target.value });
+    setPost((prevPost) => ({
+      ...prevPost,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const updatePost = async (e) => {
@@ -188,19 +190,19 @@ export default function PostDetails() {
       month: '2-digit',
       year: 'numeric',
     };
-  
+
     const formatoHora = {
       hour: '2-digit',
       minute: '2-digit',
       // second: '2-digit',
     };
-  
+
     const dataFormatada = dataObj.toLocaleDateString('pt-BR', formatoData);
     const horaFormatada = dataObj.toLocaleTimeString('pt-BR', formatoHora);
-  
+
     return `${dataFormatada} às ${horaFormatada}`;
   };
-  
+
   const handleUpdateComment = async (e, commentId) => {
     e.preventDefault();
     try {
@@ -212,9 +214,9 @@ export default function PostDetails() {
         },
         body: JSON.stringify({ content: editedComment }),
       });
-  
+
       const responseData = await response.json();
-  
+
       if (responseData.retorno === 'Comentário atualizado!') {
         setEditedComment('');
         fetchComments();
@@ -234,7 +236,7 @@ export default function PostDetails() {
       <div className='post-page'>
         {editMode ? (
           <form className="newpost-form" onSubmit={updatePost}>
-            <div className="newpost-title">
+            <div className="editpost-title">
               <label>Título:</label>
               <input
                 type="text"
@@ -267,24 +269,30 @@ export default function PostDetails() {
               </select>
             </div>
             <button className="newpost-button" type="submit">
-              Criar post
+              Editar post
             </button>
           </form>
         ) : (
           post && (
             <div className='post-page' key={post.id}>
               <div className='post-box'>
-              <h1>{post.title}</h1>
-              <p>Criado por {post.user}, em {formatarDataHora(post.created_at)}</p>
-              <p>Categoria: {post.category}</p>
-              <p>{post.content}</p>
-              <p>Última atualização: {formatarDataHora(post.updated_at)}</p>
-              {post.user_id.toString() === localStorage.getItem('user_id') && (
-                <button onClick={handleEditButton}>Edit Post</button>
-              )}
-              {post.user_id.toString() === localStorage.getItem('user_id') && (
-                <button onClick={handleDeleteButton}>Delete Post</button>
-              )}
+                <h1>{post.title}</h1>
+                <p>
+                  Criado por {post.user}, em {formatarDataHora(post.created_at)}
+                </p>
+                <p>Categoria: {post.category}</p>
+                <p>{post.content}</p>
+                <p>Última atualização: {formatarDataHora(post.updated_at)}</p>
+                {post.user_id.toString() === localStorage.getItem('user_id') && (
+                  <button onClick={handleEditButton}>
+                    <UilEditAlt className='edit-post-button' />
+                  </button>
+                )}
+                {post.user_id.toString() === localStorage.getItem('user_id') && (
+                  <button onClick={handleDeleteButton}>
+                    <UilTrashAlt className='delete-post-button' />
+                  </button>
+                )}
               </div>
             </div>
           )
@@ -296,17 +304,17 @@ export default function PostDetails() {
             <div className='comments' key={comment.id}>
               {commentEditMode === comment.id ? (
                 <>
-                <p className='comment-user'>
+                  <p className='comment-user'>
                     <strong>{comment.user}</strong>, {formatarDataHora(comment.created_at)}
-                </p>
-                <form className='form-input-edit-comment' onSubmit={(e) => handleUpdateComment(e, comment.id)}>
-                  <textarea
-                    className='input-edit-comment'
-                    value={editedComment}
-                    onChange={(e) => setEditedComment(e.target.value)}
-                  />
-                  <button className='edit-button-send' type='submit'>Editar</button>
-                </form>
+                  </p>
+                  <form className='form-input-edit-comment' onSubmit={(e) => handleUpdateComment(e, comment.id)}>
+                    <textarea
+                      className='input-edit-comment'
+                      value={editedComment}
+                      onChange={(e) => setEditedComment(e.target.value)}
+                    />
+                    <button className='edit-button-send' type='submit'>Editar</button>
+                  </form>
                 </>
               ) : (
                 <>
@@ -316,23 +324,27 @@ export default function PostDetails() {
                   </p>
                   <p className='comment-content'>{comment.content}</p>
                   <div className='comment-buttons'>
-                  {comment.user_id.toString() === localStorage.getItem('user_id') && (
-                    <button className='button-edit-comment' onClick={() => setCommentEditMode(comment.id)}>< UilEditAlt /></button>
-                  )}
-                  {comment.user_id.toString() === localStorage.getItem('user_id') && (
-                    <button className='button-delete-comment' onClick={() => handleDeleteCommentButton(comment.id)}>< UilTrashAlt /></button>
-                  )}
+                    {comment.user_id.toString() === localStorage.getItem('user_id') && (
+                      <button className='button-edit-comment' onClick={() => setCommentEditMode(comment.id)}>
+                        <UilEditAlt />
+                      </button>
+                    )}
+                    {comment.user_id.toString() === localStorage.getItem('user_id') && (
+                      <button className='button-delete-comment' onClick={() => handleDeleteCommentButton(comment.id)}>
+                        <UilTrashAlt />
+                      </button>
+                    )}
                   </div>
                 </>
               )}
             </div>
           ))
         ) : (
-          <p>Sem comentários</p>
+          <p className='no-comments'>Não há comentários.</p>
         )}
 
-        <h2 className='add-comment'>Adicionar Comentário</h2>
-          <form className='comment-form' onSubmit={handleNewCommentSubmit}>
+        <form className='comment-form' onSubmit={handleNewCommentSubmit}>
+          <h2 style={{marginTop: '50px'}} >Novo comentário</h2>
           <div>
             <textarea
               className='comment-textarea'

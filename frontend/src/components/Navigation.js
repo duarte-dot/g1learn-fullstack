@@ -14,7 +14,7 @@ const navLinks = [
   },
 ];
 
-const handleLogout = () => {
+const handleLogout = async () => {
   const token = localStorage.getItem('token');
 
   if (!token) {
@@ -22,26 +22,25 @@ const handleLogout = () => {
     return;
   }
 
-  fetch('http://localhost:8000/api/logout', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then((response) => {
-      if (response.ok) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user_id');
-
-        window.location.href = '/';
-      } else {
-        console.log('Erro ao fazer logout');
-      }
-    })
-    .catch((error) => {
-      console.log('Erro ao fazer logout', error);
+  try {
+    const response = await fetch('http://localhost:8000/api/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
     });
+
+    if (response.ok) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user_id');
+      window.location.href = '/';
+    } else {
+      console.log('Erro ao fazer logout');
+    }
+  } catch (error) {
+    console.log('Erro ao fazer logout', error);
+  }
 };
 
 const Navigation = () => {
@@ -50,40 +49,19 @@ const Navigation = () => {
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const position = window.pageYOffset;
-      setWithShadow(position > 0);
-    };
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    setWithShadow(position > 0);
+  };
 
-    const handleResize = () => {
-      if (window.innerWidth >= 992) {
-        setShowingMenu(false);
-      } else {
-        setShowingMenu(true);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 992) {
-        setShowingMenu(false);
-      } else {
-        setShowingMenu(true);
-      }
-    };
-
-    handleResize();
-  }, []);
+  const handleWindowsize = () => {
+    if (window.innerWidth >= 992) {
+      setShowingMenu(false);
+      setShowMenu(false);
+    } else {
+      setShowingMenu(true);
+    }
+  };
 
   const toggleMenu = () => {
     if (window.innerWidth >= 992) {
@@ -91,6 +69,20 @@ const Navigation = () => {
     }
     setShowMenu(!showMenu);
   };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleWindowsize);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleWindowsize);
+    };
+  }, []);
+
+  useEffect(() => {
+    handleWindowsize();
+  }, []);
 
   return (
     <nav
@@ -105,7 +97,7 @@ const Navigation = () => {
           src="https://g1learn.com/logo-g1.png?imwidth=256"
           alt="logo"
         />
-        <ul className='big-screen-nav-links' style={!showMenu && !showingMenu ? {display: 'flex'} : {display: 'none' }}>
+        <ul className="big-screen-nav-links" style={!showMenu && !showingMenu ? { display: 'flex' } : { display: 'none' }}>
           {navLinks.map((link) => (
             <li
               className="nav-link-2"
@@ -115,7 +107,7 @@ const Navigation = () => {
               {link.title}
             </li>
           ))}
-          <button className='button-logout' onClick={handleLogout}>Sair</button>
+          <button className="button-logout" onClick={handleLogout}>Sair</button>
         </ul>
         {window.innerWidth < 992 && (
           <div className="logout-and-menu">
@@ -140,7 +132,7 @@ const Navigation = () => {
         )}
       </div>
       <div className={withShadow ? '' : 'div-header-menu-list'}>
-        <ul className={showMenu  && showingMenu ? 'header-menu-list showing' : 'header-menu-list'}>
+        <ul className={showMenu && showingMenu ? 'header-menu-list showing' : 'header-menu-list'}>
           {navLinks.map((link) => (
             <li
               className="nav-link"

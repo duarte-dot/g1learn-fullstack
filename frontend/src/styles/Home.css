@@ -84,3 +84,24 @@
 .newpost-title {
   width: 100%;
 }
+
+.editpost-title {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  width: 40%;
+  margin-top: 5%;
+}
+
+@media screen and (max-width: 992px) {
+  .editpost-title {
+    width: 100%;
+  }
+}
+
+.editpost-title input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

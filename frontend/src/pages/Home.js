@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import PostForm from '../components/PostForm';
 import PostList from '../components/PostList';
-import '../styles/Home.css'
+import '../styles/Home.css';
 
 export default function Home() {
   const [posts, setPosts] = useState([]);

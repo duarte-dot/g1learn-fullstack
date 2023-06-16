@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Register.css'
+import '../styles/Register.css';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -19,13 +19,17 @@ export default function Register() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password, password_confirmation: passwordConfirmation }),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          password_confirmation: passwordConfirmation,
+        }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        const token = data.token;
-        const userId = data.user.id;
+        const { token, user: { id: userId } } = data;
 
         localStorage.setItem('user_id', userId);
         localStorage.setItem('token', token);
@@ -37,7 +41,7 @@ export default function Register() {
       }
     } catch (error) {
       setError('Ocorreu um erro na requisição. Por favor, tente novamente.');
-      console.log('Erro na requisição', error);
+      console.error('Erro na requisição', error);
     }
   };
 
@@ -93,7 +97,9 @@ export default function Register() {
             </button>
           </form>
         </div>
-        <p className='login-now'>Já registrado? <span onClick={() => navigate('/')}>Faça login!</span></p>
+        <p className='login-now'>
+          Já registrado? <span onClick={() => navigate('/')}>Faça login!</span>
+        </p>
       </div>
     </div>
   );
