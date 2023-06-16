@@ -70,12 +70,13 @@ export default function PostDetails() {
         const data = await response.json();
         setCategories(data);
       } else {
+        navigate('/home');
         console.log('Listar categorias - Erro na requisição');
       }
     } catch (error) {
       console.log('Listar categorias - Erro na requisição', error);
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     fetchPost();

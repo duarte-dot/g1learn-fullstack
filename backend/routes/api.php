@@ -7,21 +7,19 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CommentController;
 
-
-
 Route::get('/status', [UserController::class, 'status']);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/users', [UserController::class, 'list']);
-Route::get('/users/{id}', [UserController::class, 'select']);
-Route::post('/users', [UserController::class, 'add']);
-Route::put('/users/{id}', [UserController::class, 'update']);
-Route::delete('/users/{id}', [UserController::class, 'delete']);
-
 Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::post('/logout', [AuthController::class, 'logout']);
+
+  Route::get('/users', [UserController::class, 'list']);
+  Route::get('/users/{id}', [UserController::class, 'select']);
+  Route::post('/users', [UserController::class, 'add']);
+  Route::put('/users/{id}', [UserController::class, 'update']);
+  Route::delete('/users/{id}', [UserController::class, 'delete']);
     
   Route::get('/categories', [CategoryController::class, 'list']);
   Route::get('/categories/{id}', [CategoryController::class, 'select']);
