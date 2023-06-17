@@ -36,3 +36,5 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=secret
       - MYSQL_DATABASE=mydatabase
+    volumes:
+      - ./mysql:/var/lib/mysql
