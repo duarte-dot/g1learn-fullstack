@@ -60,7 +60,7 @@ se você seguiu todas as etapas corretamente, poderá acessar o projeto através
 
 <img src="https://github.com/duarte-dot/g1learn-fullstack/assets/78454964/cbf7200a-a94d-47da-94c2-998c12e1d6e4" alt="Tela de login" width="600">
 
-####Tela de registro:
+#### Tela de registro:
 
 <img src="https://github.com/duarte-dot/g1learn-fullstack/assets/78454964/93c57756-7bd1-4e3e-8edb-fb50803800cc" alt="Tela de registro" width="600">
 
