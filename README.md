@@ -50,7 +50,7 @@ ele rodará os dois comandos à seguir, juntos, e isso nos permitirá preencher 
 
 ### 6. Acesse o projeto!
 
-se você seguiu todas as etapas corretamente, poderá acessar o projeto apartir da rota http://localhost:3000/
+se você seguiu todas as etapas corretamente, poderá acessar o projeto através da rota http://localhost:3000/
 
 ## Informações sobre o projeto:
 
