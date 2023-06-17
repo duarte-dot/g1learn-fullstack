@@ -133,7 +133,7 @@ O Frontend foi desenvolvido em React com a seguinte estrutura:
 
 Você pode tentar acessar as rotas via algum aplicativo de requisição. Há também a extensão ThunderClient do VSCode, mas eu recomendo o Insomnia:
 
-### Sistemas de CRUD:
+#### Sistemas de CRUD:
 <img src="https://github.com/duarte-dot/g1learn-fullstack/assets/78454964/38f3df36-2646-471a-ad28-b5fc9831dc0c" alt="Home" width="600">
 
 ## Adicionais
@@ -141,7 +141,9 @@ Você pode tentar acessar as rotas via algum aplicativo de requisição. Há tam
 Pretendo continuar trabalhando no projeto e adicionando mais features. Se você tem alguma sugestão, Não deixe de me informar! (Ou, fique à vontade para contribuir e adicionar)
 
 Celular / Whatsapp: (21) 9 7568-1618
+
 Email: gabrieldvr@outlook.com
+
 Linkedin: https://www.linkedin.com/in/gabriel-duarte-dev/
 
 Features que ainda estou pensando em adicionar:
