@@ -10,20 +10,20 @@ Todas as informações, como posts criados, comentários e usuários registrados
 
 Antes de começar a usar o projeto, é necessário configurar o ambiente de desenvolvimento. Siga as etapas abaixo para configurar o ambiente necessário. (É bem rapidinho)
 
-## Instalação e uso
+### Instalação e uso
 
-### 1. Clone o repositório do projeto:
+#### 1. Clone o repositório do projeto:
 
 exemplo: `git clone git@github.com:duarte-dot/g1learn-fullstack.git`
 
-### 2. Configure as variáveis de ambiente do backend:
+#### 2. Configure as variáveis de ambiente do backend:
 
 modifique o arquivo env.example pasta backend/env.example para ".env"
 (o arquivo deve ficar assim):
 
 <img src="https://github.com/duarte-dot/g1learn-fullstack/assets/78454964/ba3b7cea-ec74-4d9a-acdb-ad68669bfc0c" alt="Tela de login" width="600">
 
-### 3. Instale as dependências:
+#### 3. Instale as dependências:
 
 rode os comandos:
 
@@ -31,11 +31,11 @@ rode os comandos:
 
 `cd backend && composer i && cd ..` - instala as dependências do backend
 
-### 4. Inicie o projeto usando docker-compose:
+#### 4. Inicie o projeto usando docker-compose:
 
 na pasta do projeto, abra um terminal e utilize o comando `docker-compose up -d`
 
-### 5. Execute as migrações e semeie o banco de dados:
+#### 5. Execute as migrações e semeie o banco de dados:
 
 utilize o comando `php artisan migrate && php artisan db:seed`
 
@@ -48,7 +48,7 @@ ele rodará os dois comandos à seguir, juntos, e isso nos permitirá preencher 
 <img src="https://github.com/duarte-dot/g1learn-fullstack/assets/78454964/ce9aec52-73c1-49c3-9c00-ac17aea6ed54" alt="Tela de login" width="600">
 
 
-### 6. Acesse o projeto!
+#### 6. Acesse o projeto!
 
 se você seguiu todas as etapas corretamente, poderá acessar o projeto através da rota http://localhost:3000/
 
