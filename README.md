@@ -23,13 +23,24 @@ modifique o arquivo env.example pasta backend/env.example para ".env"
 
 <img src="https://github.com/duarte-dot/g1learn-fullstack/assets/78454964/ba3b7cea-ec74-4d9a-acdb-ad68669bfc0c" alt="Tela de login" width="600">
 
-### 3. Inicie o projeto usando docker-compose:
+### 3. Instale as dependências:
+
+rode os comandos:
+
+`cd frontend && npm i && cd ..` - instala as dependências do frontend
+
+`cd backend && composer i && cd ..` - instala as dependências do backend
+
+### 4. Inicie o projeto usando docker-compose:
 
 na pasta do projeto, abra um terminal e utilize o comando `docker-compose up -d`
 
-### 4. Execute as migrações e semeie o banco de dados
+### 5. Execute as migrações e semeie o banco de dados:
 
 utilize o comando `php artisan migrate && php artisan db:seed`
+
+caso ele peça permissão, conceda provavelmente digitando "yes" no terminal.
+
 ele rodará os dois comandos à seguir, juntos, e isso nos permitirá preencher nosso banco de dados com alguns dados fictícios:
 
 <img src="https://github.com/duarte-dot/g1learn-fullstack/assets/78454964/8dcb35c3-d276-4790-96dd-44179cfb6e95" alt="Tela de login" width="600">
@@ -37,7 +48,7 @@ ele rodará os dois comandos à seguir, juntos, e isso nos permitirá preencher 
 <img src="https://github.com/duarte-dot/g1learn-fullstack/assets/78454964/ce9aec52-73c1-49c3-9c00-ac17aea6ed54" alt="Tela de login" width="600">
 
 
-### 5. Acesse o projeto!
+### 6. Acesse o projeto!
 
 se você seguiu todas as etapas corretamente, poderá acessar o projeto apartir da rota http://localhost:3000/
 
