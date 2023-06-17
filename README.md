@@ -114,9 +114,7 @@ Tela de registro:
 
 <img src="https://github.com/duarte-dot/g1learn-fullstack/assets/78454964/02455a82-f532-48be-a16d-62788310ff05" alt="Home" width="600">
 
-### Outras informações:
-
-## Api:
+### Api:
 
 Foi criada uma API para integração com o Frontend com os seguintes Controllers:
 
