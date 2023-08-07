@@ -1,4 +1,4 @@
-# Desafio - G1Learn Fullstack
+# Fórum App
 
 Este é um projeto que combina o backend em PHP utilizando o framework Laravel e o frontend em React, usando também o banco de dados MySQL. O projeto foi desenvolvido com o objetivo de concluir o desafio da G1learn.
 
