@@ -148,3 +148,4 @@ Features I'm still considering adding:
 - Creating categories through the Frontend. (Already possible through routes with requests)
 - Profile pictures for users
 - Unit tests
+
